@@ -41,11 +41,11 @@ Each build runs for 90 days, then you download a fresh build with the latest SNO
 
 ## Quickstart
 
-Pick the interface that matches how you'll use it.
+Unzip what you downloaded first then pick the interface that matches how you'll use it.
 
 ### 1. Single-call CLI — `<100 ms` per call
 
-`snoextract-json` reads JSON on stdin, writes JSON on stdout. Fresh process per call, ~70–100 ms load-dominated. Best for **ad-hoc use and low-volume integrations** — for bulk work, use server mode (6× faster per note).
+`snoextract-json` reads JSON on stdin, writes JSON on stdout. Fresh process per call, ~70–100 ms load-dominated. Best for **ad-hoc use and low-volume integrations** — for bulk work, use [server mode](docs/rest.md) (6× faster per note).
 
 | | Linux / macOS                                                                                       | Windows (cmd)                                                                                  |
 |---|---|---|
@@ -68,18 +68,7 @@ Output (truncated):
 
 Full input/output schema is in the bundled `README.txt`.
 
-### 2. REST server — 30–60 notes/sec sustained
-
-`snoextract-server --http-listen` exposes a JSON HTTP API — data loads once, per-note cost is inference only. Best for **batch and multi-client workloads**.
-
-| | Linux / macOS                                                                              | Windows (cmd)                                                                              |
-|---|---|---|
-| **Start** | `./snoextract-server --http-listen 127.0.0.1:50052`                              | `snoextract-server.exe --http-listen 127.0.0.1:50052`                                            |
-| **Call**  | `curl -s -X POST http://127.0.0.1:50052/v1/extract -H 'content-type: application/json' -d '{"text":"chest pain"}'` | `curl -s -X POST http://127.0.0.1:50052/v1/extract -H "content-type: application/json" -d "{\"text\":\"chest pain\"}"` |
-
-REST is off by default — `--http-listen` opts in. Loopback-only binding (no auth, no TLS).
-
-### 3. Python (in-process, zero overhead)
+### 2. Python (in-process, zero overhead)
 
 Pre-built wheel ships under `wheels/`. Requires Python 3.10+.
 
@@ -101,6 +90,7 @@ One wheel works across CPython 3.10/3.11/3.12/3.13 (abi3).
 ## More
 
 - **[docs/benchmarks.md](docs/benchmarks.md)** — perf and accuracy numbers
+- **[docs/rest.md](docs/rest.md)** — REST interface: HTTP+JSON extract endpoint
 - **[docs/grpc.md](docs/grpc.md)** — gRPC interface (`.proto` contract, client codegen for Python / Go / Node / C#)
 - **[docs/python.md](docs/python.md)** — Python API: entity attributes, context flags (negation / uncertainty / historicity)
 
