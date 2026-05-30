@@ -6,15 +6,23 @@ The README Quickstart covers installation; this page focuses on what's worth kno
 
 ## Extract entities
 
+Point the loader at the dist's `data/` directory once via env var:
+
+```bash
+export SNOEXTRACT_DATA_DIR=/path/to/dist/data
+```
+
 ```python
 from snoextract import Pipeline
 
-pipeline = Pipeline.load("./data")
+pipeline = Pipeline.load()    # reads SNOEXTRACT_DATA_DIR
 result = pipeline.process("Patient on Metformin 1g BD for diabetes mellitus.")
 
 for e in result.entities:
     print(e.text, e.cui, e.name, e.semantic_type)
 ```
+
+`Pipeline.load()` also accepts an explicit path — `Pipeline.load("./data")` — if you'd rather not use the env var.
 
 Output:
 
@@ -37,7 +45,7 @@ Useful entity attributes:
 | `kind`          | `EntityKind`   | Discriminator (`"medication"`, `"disorder"`, `"vital"`, `"lab"`, `"concept"`) — unlocks `med_info` and `value` |
 | `section`       | `str` or `None` | Section the entity appeared in, if section detection found one |
 
-`Pipeline.load` is the one-shot loader; for repeated runs in long-lived processes, keep the `Pipeline` instance and call `.process()` per note — loading is the slow part (~100 ms), inference is fast.
+`Pipeline.load()` is the one-shot loader; for repeated runs in long-lived processes, keep the `Pipeline` instance and call `.process()` per note — loading is the slow part (~100 ms), inference is fast.
 
 ## Context flags
 

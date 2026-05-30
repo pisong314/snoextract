@@ -47,6 +47,8 @@ Unzip what you downloaded first then pick the interface that matches how you'll 
 
 `snoextract-json` reads JSON on stdin, writes JSON on stdout. Fresh process per call, ~70–100 ms load-dominated. Best for **ad-hoc use and low-volume integrations** — for bulk work, use [server mode](docs/rest.md) (6× faster per note).
 
+Run from the unzipped dist directory so `./data` is auto-discovered, or point at it explicitly with `export SNOEXTRACT_DATA_DIR=/path/to/dist/data` (or `--data-dir`).
+
 | | Linux / macOS                                                                                       | Windows (cmd)                                                                                  |
 |---|---|---|
 | **Run** | `echo '{"text":"Pt on Metformin 1g BD for diabetes mellitus."}' \| ./snoextract-json` | `echo {"text":"Pt on Metformin 1g BD for diabetes mellitus."} \| snoextract-json.exe` |
@@ -56,12 +58,12 @@ Output (truncated):
 
 ```json
 {
-  "version": "0.34.5",
+  "version": "0.34.7",
   "entities": [
     { "text": "Metformin", "start": 6, "end": 15, "cui": "372567009",
-      "name": "Metformin", "semantic_type": "substance", ... },
+      "name": "Metformin (substance)", "semantic_type": "substance", ... },
     { "text": "diabetes mellitus", "start": 23, "end": 40, "cui": "73211009",
-      "name": "Diabetes mellitus", "semantic_type": "disorder", ... }
+      "name": "Diabetes mellitus (disorder)", "semantic_type": "disorder", ... }
   ]
 }
 ```
@@ -73,13 +75,14 @@ Full input/output schema is in the bundled `README.txt`.
 Pre-built wheel ships under `wheels/`. Requires Python 3.10+.
 
 ```bash
-python3 -m pip install wheels/snoextract-0.34.5-cp310-abi3-*.whl
+python3 -m pip install wheels/snoextract-0.34.7-cp310-abi3-*.whl
+export SNOEXTRACT_DATA_DIR=/path/to/dist/data
 ```
 
 ```python
 from snoextract import Pipeline
 
-pipeline = Pipeline.load("./data")
+pipeline = Pipeline.load()    # reads SNOEXTRACT_DATA_DIR
 result = pipeline.process("Patient has chest pain and diabetes mellitus.")
 for e in result.entities:
     print(e.text, e.cui, e.name, e.semantic_type)

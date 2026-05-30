@@ -11,7 +11,7 @@ labels: bug
 
 ## Environment
 
-- **SNOExtract version:** <!-- e.g. 0.34.5 — see startup log or `snoextract-json --help` -->
+- **SNOExtract version:** <!-- e.g. 0.34.7 — see startup log or `snoextract-json --help` -->
 - **OS:** <!-- e.g. Ubuntu 22.04, Windows 11 22H2, RHEL 8.8 -->
 - **Interface:** <!-- snoextract-json | snoextract-server (gRPC) | snoextract-server (REST) | Python wheel -->
 
